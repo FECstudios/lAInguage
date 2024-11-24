@@ -11,7 +11,8 @@
     "permissions": [
     "activeTab",
     "scripting",
-    "storage"
+    "storage",
+    "aiLanguageModelOriginTrial"
     ],
     "host_permissions": [
       "<all_urls>"
