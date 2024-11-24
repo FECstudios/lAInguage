@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html style="border-radius: 24px; overflow: hidden;">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset styles for the extension, scoped to avoid interference */
+    :root {
+      background-color: #21001E;
+
+    }
+    
+    .extension-popup * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Main extension popup styling */
+    .extension-popup {
+      width: 320px;
+      min-height: 140px;
+      padding: 16px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(45deg, #21001E, #121A31);
+      color: #d1d1d1;
+      border-radius: 12px;
+      border: none;
+    }
+
+    .extension-popup .container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      background: transparent;
+    }
+
+    .extension-popup .title {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #e0e0e0;
+      background: transparent;
+      line-height: 1;
+      display: inline-block;
+    }
+
+    .extension-popup .title .gradient-text {
+      background: linear-gradient(
+        90deg,
+        #bf7ff7,
+        #9d4edd,
+        #7b2cbf,
+        #9d4edd,
+        #bf7ff7
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: gradientAnimation 3s linear infinite;
+      text-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+      font-weight: 700;
+    }
+
+    .extension-popup button {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 24px;
+      border: none;
+      background-color: #372554;
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .extension-popup button:hover {
+      background-color: #52528C;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(82, 82, 140, 0.3);
+    }
+
+    .extension-popup button:active {
+      background-color: #231123;
+      transform: translateY(1px);
+    }
+
+    .extension-popup #status {
+      font-size: 13px;
+      color: #bbbbbb;
+      text-align: center;
+      padding: 6px 12px;
+      border-radius: 24px;
+      background-color: transparent;
+      min-height: 28px;
+      display: none;
+    }
+
+    .extension-popup #status:not(:empty) {
+      display: block;
+    }
+
+    .extension-popup select#targetLanguageSelect {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 24px;
+      border: none;
+      background-color: #372554;
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .extension-popup label[for="targetLanguageSelect"] {
+      color: #ffffff;
+      margin-bottom: 8px;
+      font-weight: 700;
+      background: transparent;
+    }
+
+    .extension-popup select#targetLanguageSelect option {
+      background-color: #231123;
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+    }
+
+    * {
+      background: transparent;
+    }
+  </style>
+</head>
+<body style="background-color: transparent;">
+  <div class="extension-popup">
+    <div class="container">
+      <h1 class="title">L<span class="gradient-text">AI</span>nguage</h1>
+      <button id="highlightBtn">Enable Translation</button>
+      <button id="translateButton">Translate Page</button>
+      <label for="targetLanguageSelect">Target Language:</label>
+      <select id="targetLanguageSelect">
+        <option value="es">Spanish</option>
+        <option value="ja">Japanese</option>
+      </select>
+      <label>
+        <input type="checkbox" id="translateToggle" checked> Enable Translate Image on Hover
+      </label>
+      <div id="logs" style="margin-top: 16px; font-size: 12px; overflow-y: auto; max-height: 100px; background: #121212; padding: 8px; border-radius: 8px;">
+        <strong>Logs:</strong>
+        <ul id="logList"></ul>
+      </div>
+      <div id="status"></div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

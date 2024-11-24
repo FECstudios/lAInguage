@@ -1,0 +1,34 @@
+{
+    "manifest_version": 3,
+    "name": "lAInguage",
+    "version": "1.0",
+    "description": "Translates webpages with ai",
+    "icons": {
+      "16": "logo1.png",
+      "48": "logo1.png",
+      "128": "logo1.png"
+    },
+    "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+    ],
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["popup.js"]
+      }
+    ]
+  }
