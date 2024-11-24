@@ -39,47 +39,54 @@ async function translateText(inputText, targetLanguage) {
   }
   async function translateText2(inputText, targetLanguage) {
     try {
-      // Check AI availability
-      const { available, defaultTemperature, defaultTopK, maxTopK } = await ai.languageModel.capabilities();
-      if (available !== "no") {
-        const session = await ai.languageModel.create();
+      // Check AI capabilities
+      const capabilities = await chrome.aiOriginTrial.languageModel.capabilities();
   
-        // Construct the prompt
-        const prompt = `
-  dear ai i want you to translate my word ${inputText} to ${targetLanguage} i saw on the webstite
-  here is some context from website:
-  EXTRACT SOME TEXT FROM THE WEBSITE
-  
-  i want you to give me the result in a single word (or words) just the translation and NOTHİNG ELSE
-  `;
-  
-        // Prompt the model and wait for the result
-        const result = await session.prompt(prompt);
-        const translatedText = result.trim();
-  
-        // Retranslate the text to English
-        const retranslateResponse = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(translatedText)}&langpair=${targetLanguage}|en`);
-        const retranslateData = await retranslateResponse.json();
-  
-        if (!retranslateData.responseData.translatedText) {
-          return "Sorry, something went wrong with the retranslation.";
-        }
-  
-        const retranslatedText = retranslateData.responseData.translatedText;
-  
-        // Return both translations
-        return {
-          originalTranslation: translatedText,
-          retranslatedToEnglish: retranslatedText
-        };
-      } else {
-        console.log("AI NOT AVAILABLE");
+      if (capabilities.available === 'no') {
+        console.error("AI NOT AVAILABLE");
         return "Error: AI not available.";
       }
+  
+      // Create a session
+      const session = await chrome.aiOriginTrial.languageModel.create({
+        temperature: capabilities.defaultTemperature,
+        topK: capabilities.defaultTopK,
+        systemPrompt: 'You are a helpful AI specializing in accurate translations.',
+      });
+  
+      // Construct the prompt
+      const prompt = `
+        Translate the following text into ${targetLanguage}. Provide the translation as a single word or phrase without additional comments:
+        "${inputText}"
+      `;
+  
+      // Prompt the model and wait for the result
+      const result = await session.prompt(prompt);
+      const translatedText = result.trim();
+  
+      // Retranslate the text to English
+      const retranslateResponse = await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(translatedText)}&langpair=${targetLanguage}|en`
+      );
+      const retranslateData = await retranslateResponse.json();
+  
+      if (!retranslateData.responseData.translatedText) {
+        return "Sorry, something went wrong with the retranslation.";
+      }
+  
+      const retranslatedText = retranslateData.responseData.translatedText;
+  
+      // Return both translations
+      return {
+        originalTranslation: translatedText,
+        retranslatedToEnglish: retranslatedText,
+      };
     } catch (error) {
+      console.error("Error occurred:", error);
       return "Error: Unable to fetch translation.";
     }
   }
+  
 
 // Function to store translation in history
 function addToHistory(original, translated, targetLang) {
